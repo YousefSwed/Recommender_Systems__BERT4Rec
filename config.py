@@ -1,12 +1,20 @@
-config = {
-    "embed_dim": 128,
-    "learning_rate": 0.0005,
-    # "learning_rate": 1e-4,
-    "gamma": 0.99,
-    "max_seq_len": 20,
-    "num_layers":2, 
-    "num_heads":4, 
-    "dropout":0.2,
-    "num_epochs": 50,
-    "pacience": 5
-}
+# config.py
+
+SEQ_LEN = 20
+MASK_PROB = 0.15
+
+BATCH_SIZE = 128
+LR = 1e-4
+EPOCHS = 50
+PATIENCE = 3
+
+EMBED_DIM = 64
+NUM_HEADS = 4
+NUM_LAYERS = 2
+DROPOUT = 0.2
+
+MODEL_SAVE_PATH = "results/best_model.pt"
+
+DATA_DIR = "ml-1m/ratings.dat"
+PROCESSED_DIR = "preprocessed_data/"
+RESULTS_DIR = "results/"
