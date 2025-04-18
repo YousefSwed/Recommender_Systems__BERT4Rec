@@ -12,6 +12,7 @@ This project implements a sequential recommendation model based on BERT4Rec usin
 BERT4Rec_Assignment/
 ├── data_preprocessing.py
 ├── BERT4Rec_model.py
+├── config.py
 ├── train.py
 ├── evaluate.py
 ├── main.py
