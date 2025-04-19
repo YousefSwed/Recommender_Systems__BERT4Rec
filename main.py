@@ -9,13 +9,17 @@ from BERT4Rec_model import BERT4Rec
 from train import train_model
 from evaluate import evaluate_model
 from plot import plot_learning_curves, plot_metrics
-from config import PROCESSED_DIR, RESULTS_DIR, MODEL_SAVE_PATH, SEQ_LEN
+from config import PROCESSED_DIR, RESULTS_DIR, MODEL_SAVE_PATH
 
 def load_pickle(file):
     with open(file, 'rb') as f:
         return pickle.load(f)
 
 def main():
+    # Step 0: Check if directories exist
+    os.makedirs(PROCESSED_DIR, exist_ok=True)
+    os.makedirs(RESULTS_DIR, exist_ok=True)
+
     # Step 1: Data Preprocessing
     print("Processing data...")
     process_and_save()
@@ -49,7 +53,7 @@ def main():
     print("Generating plots...")
     os.makedirs(RESULTS_DIR, exist_ok=True)
     plot_learning_curves()
-    plot_metrics(metrics)
+    plot_metrics()
 
     # Step 8: Save metrics
     with open(os.path.join(RESULTS_DIR, "model_metrics.json"), "w") as f:
