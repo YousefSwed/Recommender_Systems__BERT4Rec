@@ -15,25 +15,25 @@ def load_pickle(path):
 
 EXPERIMENTS = [
     {
-        "label": "Baseline\n(d=128,L=2,mask=15%)",
+        "label": "Baseline (d=128,L=2,mask=15%)",
         "embed_dim": 128,
         "num_layers": 2,
         "mask_prob": 0.15
     },
     {
-        "label": "Larger Hidden\n(d=256)",
+        "label": "Larger Hidden (d=256)",
         "embed_dim": 256,
         "num_layers": 2,
         "mask_prob": 0.15
     },
     {
-        "label": "More Layers\n(L=4)",
+        "label": "More Layers (L=4)",
         "embed_dim": 128,
         "num_layers": 4,
         "mask_prob": 0.15
     },
     {
-        "label": "High Mask\n(50%)",
+        "label": "High Mask (50%)",
         "embed_dim": 128,
         "num_layers": 2,
         "mask_prob": 0.5
