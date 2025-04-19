@@ -23,7 +23,10 @@ def plot_learning_curves(json_file='results/model_performance.json', save_path='
     plt.savefig(save_path)
     plt.close()
 
-def plot_metrics(metrics, save_path='results/metrics_at_k.png'):
+def plot_metrics(json_file='results/model_metrics.json', save_path='results/metrics_at_k.png'):
+    with open(json_file) as f:
+        metrics = json.load(f)
+    
     ks = list(metrics['recall'].keys())
     recall_vals = [metrics['recall'][k] for k in ks]
     ndcg_vals = [metrics['ndcg'][k] for k in ks]
@@ -39,7 +42,10 @@ def plot_metrics(metrics, save_path='results/metrics_at_k.png'):
     plt.savefig(save_path)
     plt.close()
 
-def plot_experiment_results(results, save_path='results/config_comparison.png'):
+def plot_experiment_results(json_file='results/config_comparison.json', save_path='results/config_comparison.png'):
+    with open(json_file) as f:
+        results = json.load(f)
+
     labels = [r["label"] for r in results]
     recall = [r["recall@10"] for r in results]
     ndcg = [r["ndcg@10"] for r in results]
@@ -47,14 +53,18 @@ def plot_experiment_results(results, save_path='results/config_comparison.png'):
     x = range(len(labels))
     width = 0.35
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(12, 8))
+
     ax.bar([i - width/2 for i in x], recall, width=width, label='Recall@10', color='orange')
     ax.bar([i + width/2 for i in x], ndcg, width=width, label='NDCG@10', color='orangered')
-
+    
     ax.set_ylabel('Metric value')
     ax.set_title('Model Configuration Comparison on ML-1M')
     ax.set_xticks(x)
     ax.set_xticklabels(labels)
+    
+    ax.grid(color='lightgrey', linestyle='--', linewidth=1, alpha=0.7)
+    ax.set_axisbelow(True)
     ax.legend()
     plt.tight_layout()
     os.makedirs('results', exist_ok=True)
