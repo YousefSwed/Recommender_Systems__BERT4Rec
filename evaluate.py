@@ -1,38 +1,37 @@
+# evaluate.py
+
+import torch
 import numpy as np
+from sklearn.metrics import ndcg_score
+from config import SEQ_LEN
+from tqdm import tqdm
 
-def recall_at_k(ranked, gt, k):
-    return 1 if gt in ranked[:k] else 0
+def evaluate_model(model, test_data, num_items, device, k_values=[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]):
+    model.eval()
+    recalls = {k: [] for k in k_values}
+    ndcgs = {k: [] for k in k_values}
 
-def ndcg_at_k(ranked, gt, k):
-    if gt in ranked[:k]:
-        idx = ranked[:k].index(gt)
-        return 1.0 / np.log2(idx + 2)
-    return 0.0
+    with torch.no_grad():
+        for seq in tqdm(test_data, desc="Evaluating"):
+            input_seq = torch.LongTensor([seq]).to(device)
+            mask = (input_seq == 0)
+            output = model(input_seq, mask)[0][-1]  # [num_items]
+            topk_scores = torch.topk(output, max(k_values)).indices.cpu().numpy()
 
+            target_item = seq[-1]
+            for k in k_values:
+                top_k = topk_scores[:k]
+                hit = int(target_item in top_k)
+                recalls[k].append(hit)
 
-def compute_metrics(logits, ground_truth, mask_positions=None, k=10):
-    """
-    Compute Recall@k and NDCG@k.
+                # for NDCG
+                relevance = [1 if item == target_item else 0 for item in top_k]
+                ndcg = ndcg_score([relevance], [[1] * len(relevance)])
+                ndcgs[k].append(ndcg)
 
-    - logits: torch.Tensor [N, V] of scores
-    - ground_truth: torch.Tensor [N] of true item IDs
-    - mask_positions: optional torch.BoolTensor [N] indicating which entries to evaluate
-    - k: cutoff for metrics
-    """
-    # Optionally filter by mask_positions
-    if mask_positions is not None:
-        mask = mask_positions.cpu().numpy().astype(bool)
-        logits = logits[mask]
-        ground_truth = ground_truth[mask]
+    metrics = {
+        "recall": {k: np.mean(recalls[k]) for k in k_values},
+        "ndcg": {k: np.mean(ndcgs[k]) for k in k_values},
+    }
 
-    # Convert to numpy for ranking
-    scores = logits.cpu().numpy()
-    truths = ground_truth.cpu().numpy()
-
-    recall_list, ndcg_list = [], []
-    for i, gt in enumerate(truths):
-        ranked = list(np.argsort(-scores[i]))
-        recall_list.append(recall_at_k(ranked, int(gt), k))
-        ndcg_list.append(ndcg_at_k(ranked, int(gt), k))
-
-    return { 'recall': np.mean(recall_list), 'ndcg': np.mean(ndcg_list) }
+    return metrics
