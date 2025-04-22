@@ -97,10 +97,13 @@ python run_experiments.py
 
 Check the `results/` folder for:
 
+- Epoch-wise loss and metrics: `model_performance.json`
 - Learning curve: `learning_curves.png`
 - Final evaluation metrics: `model_metrics.json`
 - Metric-at-k plot: `metrics_at_k.png`
 - Configuration comparison bar chart: `config_comparison.png`
+- Results from all configuration experiments: `config_comparison.json`
+- Best model checkpoint: `best_model.pt`
 
 ---
 
