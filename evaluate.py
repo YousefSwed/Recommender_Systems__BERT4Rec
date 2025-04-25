@@ -3,7 +3,6 @@
 import torch
 import numpy as np
 from sklearn.metrics import ndcg_score
-from config import SEQ_LEN
 from tqdm import tqdm
 
 def evaluate_model(model, test_data, num_items, device, k_values=[5, 10, 15, 20, 25, 30, 35, 40, 45, 50]):
