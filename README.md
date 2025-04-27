@@ -37,13 +37,17 @@ BERT4Rec_Assignment/
 │   ├── val_seqs.pkl
 │   └── test_seqs.pkl
 └── results/
-    ├── best_model.pt               # Best model checkpoint
-    ├── model_performance.json      # Epoch-wise loss & metrics
-    ├── model_metrics.json          # Final test Recall/NDCG @k
-    ├── learning_curves.png         # Training vs validation loss
-    ├── metrics_at_k.png            # NDCG and Recall at various k
-    ├── config_comparison.json      # Results from all config experiments
-    └── config_comparison.png       # Grouped bar chart of those results
+    ├── best_model.pt                           # Best model checkpoint
+    ├── model_performance.json                  # Epoch-wise loss & metrics
+    ├── model_metrics.json                      # Final test Recall/NDCG @k
+    ├── learning_curves.png                     # Training vs validation loss
+    ├── metrics_at_k.png                        # NDCG and Recall at various k
+    ├── compare_embed_dim_comparison.json       # Results from different hidden layers dimention experiments
+    ├── compare_embed_dim_comparison.png        # Grouped bar chart of different hidden layers dimention results
+    ├── compare_num_layers_comparison.json      # Results from different hidden layers experiments
+    ├── compare_num_layers_comparison.png       # Grouped bar chart of different hidden layers results
+    ├── compare_mask_prob_comparison.json       # Results from different mask probabilty experiments
+    └── compare_mask_prob_comparison.png        # Grouped bar chart of different mask probabilty results
 ```
 
 ---
@@ -62,6 +66,21 @@ Install with pip:
 
 ```bash
 pip install torch pandas numpy matplotlib scikit-learn tqdm
+```
+
+### Run on GPU (Optinal)
+
+To train this module on GPU you need to install `CUDA` and `cuDNN` on your device first, then you should run the following command to install right version of torch
+
+```bash
+python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
+```
+
+**FYI** I installed `CUDA` version `12.8.1` and `cuDNN` version `9.8.0` which are the latest version of `CUDA` (in this moment).
+You can change the version in the link to match the one you have
+
+```bash
+python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu{version_number}
 ```
 
 ---
