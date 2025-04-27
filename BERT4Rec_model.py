@@ -2,11 +2,12 @@
 
 import torch
 import torch.nn as nn
-from config import SEQ_LEN
+from config import SEQ_LEN, EMBED_DIM, NUM_HEADS, NUM_LAYERS, DROPOUT
 
 class BERT4Rec(nn.Module):
-    def __init__(self, num_items, embed_dim=64, num_layers=2, num_heads=4, dropout=0.2):
+    def __init__(self, num_items, embed_dim=EMBED_DIM, num_layers=NUM_LAYERS, num_heads=NUM_HEADS, dropout=DROPOUT):
         super(BERT4Rec, self).__init__()
+        
         self.item_embedding = nn.Embedding(num_items + 2, embed_dim, padding_idx=0)
         self.pos_embedding = nn.Embedding(SEQ_LEN, embed_dim)
 
@@ -15,7 +16,8 @@ class BERT4Rec(nn.Module):
             nhead=num_heads,
             dim_feedforward=embed_dim * 4,
             dropout=dropout,
-            activation='gelu'
+            activation='gelu',
+            batch_first=True  # ✅ Now expects (batch_size, seq_len, embed_dim)
         )
         self.transformer = nn.TransformerEncoder(encoder_layer, num_layers=num_layers)
 
@@ -27,7 +29,8 @@ class BERT4Rec(nn.Module):
         positions = torch.arange(0, SEQ_LEN).unsqueeze(0).to(x.device)
         x = self.item_embedding(x) + self.pos_embedding(positions)
         x = self.norm(self.dropout(x))
-        x = x.permute(1, 0, 2)  # [seq_len, batch_size, embed_dim]
+
+        # ✅ No permute needed anymore
         x = self.transformer(x, src_key_padding_mask=mask)
-        x = x.permute(1, 0, 2)  # [batch_size, seq_len, embed_dim]
-        return self.output(x)
+
+        return self.output(x)  # shape: [batch_size, seq_len, num_items]
