@@ -133,7 +133,7 @@ The model is evaluated using the **leave-one-out strategy** with:
 - **Recall@k**
 - **NDCG@k**
 
-for `k = [5, 10, 15, 20, 50]`.
+for `k = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]`.
 
 ---
 
