@@ -70,18 +70,21 @@ pip install torch pandas numpy matplotlib scikit-learn tqdm
 
 ### Run on GPU (Optinal)
 
-To train this module on GPU you need to install `CUDA` and `cuDNN` on your device first, then you should run the following command to install right version of torch
+To train this module on a GPU, ensure that `CUDA` and `cuDNN` are installed on your device. Once installed, use the following command to install the appropriate version of PyTorch:
+
+```bash
+python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu{version_number}
+```
+
+Replace `{version_number}` with the version of CUDA installed on your system.
+
+For example, with `CUDA` version `12.8.1` and `cuDNN` version `9.8.0`, the command would be:
 
 ```bash
 python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
 ```
 
-**FYI** I installed `CUDA` version `12.8.1` and `cuDNN` version `9.8.0` which are the latest version of `CUDA` (in this moment).
-You can change the version in the link to match the one you have
-
-```bash
-python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu{version_number}
-```
+**Note:** All training for this project was conducted on a GPU.
 
 ---
 
