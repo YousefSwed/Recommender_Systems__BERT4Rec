@@ -106,7 +106,13 @@ This will:
 
 ### 3. Run Multiple Configuration Experiments
 
-To compare different embedding sizes, layer counts, and masking ratios:
+We conducted several experiments with the following configurations:
+
+- Embedding dimensions: [32, 64, 128, 256, 512]
+- Number of layers: [1, 2, 4]
+- Masking ratios: [15%, 30%, 50%]
+
+To execute the experiments, use the following command:
 
 ```bash
 python run_experiments.py
@@ -120,8 +126,12 @@ Check the `results/` folder for:
 - Learning curve: `learning_curves.png`
 - Final evaluation metrics: `model_metrics.json`
 - Metric-at-k plot: `metrics_at_k.png`
-- Configuration comparison bar chart: `config_comparison.png`
-- Results from all configuration experiments: `config_comparison.json`
+- Embedding dimension comparison bar chart: `compare_embed_dim_comparison.png`
+- Results from embedding dimension experiments: `compare_embed_dim_comparison.json`
+- Number of layers comparison bar chart: `compare_num_layers_comparison.png`
+- Results from number of layers experiments: `compare_num_layers_comparison.json`
+- Mask probability comparison bar chart: `compare_mask_prob_comparison.png`
+- Results from mask probability experiments: `compare_mask_prob_comparison.json`
 - Best model checkpoint: `best_model.pt`
 
 ---
