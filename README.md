@@ -37,13 +37,17 @@ BERT4Rec_Assignment/
 │   ├── val_seqs.pkl
 │   └── test_seqs.pkl
 └── results/
-    ├── best_model.pt               # Best model checkpoint
-    ├── model_performance.json      # Epoch-wise loss & metrics
-    ├── model_metrics.json          # Final test Recall/NDCG @k
-    ├── learning_curves.png         # Training vs validation loss
-    ├── metrics_at_k.png            # NDCG and Recall at various k
-    ├── config_comparison.json      # Results from all config experiments
-    └── config_comparison.png       # Grouped bar chart of those results
+    ├── best_model.pt                           # Best model checkpoint
+    ├── model_performance.json                  # Epoch-wise loss & metrics
+    ├── model_metrics.json                      # Final test Recall/NDCG @k
+    ├── learning_curves.png                     # Training vs validation loss
+    ├── metrics_at_k.png                        # NDCG and Recall at various k
+    ├── compare_embed_dim_comparison.json       # Results from different hidden layers dimention experiments
+    ├── compare_embed_dim_comparison.png        # Grouped bar chart of different hidden layers dimention results
+    ├── compare_num_layers_comparison.json      # Results from different hidden layers experiments
+    ├── compare_num_layers_comparison.png       # Grouped bar chart of different hidden layers results
+    ├── compare_mask_prob_comparison.json       # Results from different mask probabilty experiments
+    └── compare_mask_prob_comparison.png        # Grouped bar chart of different mask probabilty results
 ```
 
 ---
@@ -63,6 +67,24 @@ Install with pip:
 ```bash
 pip install torch pandas numpy matplotlib scikit-learn tqdm
 ```
+
+### Run on GPU (Optinal)
+
+To train this module on a GPU, ensure that `CUDA` and `cuDNN` are installed on your device. Once installed, use the following command to install the appropriate version of PyTorch:
+
+```bash
+python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu{version_number}
+```
+
+Replace `{version_number}` with the version of CUDA installed on your system.
+
+For example, with `CUDA` version `12.8.1` and `cuDNN` version `9.8.0`, the command would be:
+
+```bash
+python -m pip install --pre torch torchvision torchaudio --index-url https://download.pytorch.org/whl/nightly/cu128
+```
+
+**Note:** All training for this project was conducted on a GPU.
 
 ---
 
@@ -87,7 +109,13 @@ This will:
 
 ### 3. Run Multiple Configuration Experiments
 
-To compare different embedding sizes, layer counts, and masking ratios:
+We conducted several experiments with the following configurations:
+
+- Embedding dimensions: [32, 64, 128, 256, 512]
+- Number of layers: [1, 2, 4]
+- Masking ratios: [15%, 30%, 50%]
+
+To execute the experiments, use the following command:
 
 ```bash
 python run_experiments.py
@@ -101,8 +129,12 @@ Check the `results/` folder for:
 - Learning curve: `learning_curves.png`
 - Final evaluation metrics: `model_metrics.json`
 - Metric-at-k plot: `metrics_at_k.png`
-- Configuration comparison bar chart: `config_comparison.png`
-- Results from all configuration experiments: `config_comparison.json`
+- Embedding dimension comparison bar chart: `compare_embed_dim_comparison.png`
+- Results from embedding dimension experiments: `compare_embed_dim_comparison.json`
+- Number of layers comparison bar chart: `compare_num_layers_comparison.png`
+- Results from number of layers experiments: `compare_num_layers_comparison.json`
+- Mask probability comparison bar chart: `compare_mask_prob_comparison.png`
+- Results from mask probability experiments: `compare_mask_prob_comparison.json`
 - Best model checkpoint: `best_model.pt`
 
 ---
@@ -114,7 +146,7 @@ The model is evaluated using the **leave-one-out strategy** with:
 - **Recall@k**
 - **NDCG@k**
 
-for `k = [5, 10, 15, 20, 50]`.
+for `k = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]`.
 
 ---
 

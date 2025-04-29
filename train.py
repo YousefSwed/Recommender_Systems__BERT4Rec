@@ -54,12 +54,12 @@ def train_model(model, train_data, val_data, num_items, device, mask_prob=MASK_P
             logits = model(masked_inputs, mask)
             loss = criterion(logits.view(-1, logits.size(-1)), labels.view(-1))
 
-            train_loss += loss.item()
+            train_loss += loss.detach().item()
             optimizer.zero_grad()
             loss.backward()
             optimizer.step()
 
-            loop.set_postfix(loss=loss.item())
+            loop.set_postfix(loss=loss.detach().item())
 
         # Evaluate on validation set
         val_loss = evaluate_val_loss(model, val_data, criterion, num_items, device, mask_prob)
