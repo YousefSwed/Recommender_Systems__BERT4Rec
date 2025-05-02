@@ -32,7 +32,7 @@ def mask_items(seqs, num_items, mask_prob):
 
 def train_model(model, train_data, val_data, num_items, device, mask_prob=MASK_PROB):
     optimizer = optim.Adam(model.parameters(), lr=LR)
-    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=3,verbose=True, min_lr=1e-5)
+    scheduler = optim.lr_scheduler.ReduceLROnPlateau(optimizer, mode='max', factor=0.5, patience=PATIENCE)
     criterion = nn.CrossEntropyLoss(ignore_index=0)
     model.to(device)
 
@@ -77,7 +77,8 @@ def train_model(model, train_data, val_data, num_items, device, mask_prob=MASK_P
         history.append(log_entry)
 
         print(f"Epoch {epoch} | Train Loss: {log_entry['train_loss']:.4f} | "
-              f"Val Loss: {val_loss:.4f} | NDCG@10: {val_ndcg:.4f} | Recall@10: {val_recall:.4f}\n")
+              f"Val Loss: {val_loss:.4f} | NDCG@10: {val_ndcg:.4f} | Recall@10: {val_recall:.4f} | "
+              f"Patience counter: {patience_counter}\n")
 
         # Early stopping based on NDCG@10
         if val_ndcg > best_ndcg:
@@ -90,7 +91,7 @@ def train_model(model, train_data, val_data, num_items, device, mask_prob=MASK_P
                 print("Early stopping triggered by NDCG@10.")
                 break
 
-        scheduler.step(val_ndcg)
+        scheduler.step(val_ndcg)  # where val_ndcg = val_metrics['ndcg'][10]
 
     os.makedirs(os.path.dirname(MODEL_SAVE_PATH), exist_ok=True)
     with open('results/model_performance.json', 'w') as f:
