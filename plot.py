@@ -1,5 +1,3 @@
-# plot.py
-
 import json
 import matplotlib.pyplot as plt
 import os

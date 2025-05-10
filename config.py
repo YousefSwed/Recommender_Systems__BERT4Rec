@@ -1,5 +1,3 @@
-# config.py
-
 SEQ_LEN = 20
 MASK_PROB = 0.15
 

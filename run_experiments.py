@@ -8,6 +8,7 @@ from config import PROCESSED_DIR, MODEL_SAVE_PATH
 from plot import plot_experiment_results
 
 def load_pickle(path):
+    # Load data from a pickle file
     with open(path, 'rb') as f:
         return pickle.load(f)
 
@@ -33,15 +34,19 @@ EXPERIMENT_SETS = {
 }
 
 def run_experiment_group(experiment_list, plot_name):
+    # Load training, validation, and test data
     train_data = load_pickle(PROCESSED_DIR + 'train_seqs.pkl')
     val_data = load_pickle(PROCESSED_DIR + 'val_seqs.pkl')
     test_data = load_pickle(PROCESSED_DIR + 'test_seqs.pkl')
 
+    # Determine the number of unique items
     num_items = max(max(seq) for seq in train_data + val_data + test_data)
+    # Use CUDA if available, otherwise use CPU
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     results = []
 
+    # Iterate through each experiment configuration
     for config in experiment_list:
         print(f"\n=== Running: {config['label']} ===")
         model = BERT4Rec(
@@ -50,13 +55,17 @@ def run_experiment_group(experiment_list, plot_name):
             num_layers=config["num_layers"]
         )
 
+        # Train the model
         train_model(model, train_data, val_data, num_items, device, mask_prob=config["mask_prob"])
 
+        # Load the best model state
         model.load_state_dict(torch.load(MODEL_SAVE_PATH))
         model.to(device)
 
+        # Evaluate the model
         metrics = evaluate_model(model, test_data, num_items, device, k_values=[10])
 
+        # Store the results
         result_entry = {
             "label": config["label"],
             "recall@10": metrics["recall"][10],
