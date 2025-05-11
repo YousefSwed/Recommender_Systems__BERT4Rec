@@ -1,10 +1,10 @@
 # BERT4Rec Assignment
 
-## 👥 Team
+## Team
 
 Group 33  
 
-## 📚 Overview
+## Overview
 
 This project implements a **sequential recommendation system** based on the **BERT4Rec** architecture using a custom Transformer in PyTorch. The model is trained using **masked item prediction**, inspired by masked language modeling, to predict the next item in a user's interaction sequence.
 
@@ -17,7 +17,7 @@ It is trained and evaluated on the **MovieLens 1M dataset**, and supports:
 
 ---
 
-## 📁 Directory Structure
+## Directory Structure
 
 ```plaintext
 BERT4Rec_Assignment/
@@ -52,7 +52,7 @@ BERT4Rec_Assignment/
 
 ---
 
-## 📦 Requirements
+## Requirements
 
 - Python 3.6+
 - PyTorch (>= 1.6)
@@ -68,7 +68,7 @@ Install with pip:
 pip install torch pandas numpy matplotlib scikit-learn tqdm
 ```
 
-### Run on GPU (Optinal)
+### Run on GPU (Optional)
 
 To train this module on a GPU, ensure that `CUDA` and `cuDNN` are installed on your device. Once installed, use the following command to install the appropriate version of PyTorch:
 
@@ -88,7 +88,7 @@ python -m pip install --pre torch torchvision torchaudio --index-url https://dow
 
 ---
 
-## 🚀 How to Run
+## How to Run
 
 ### 1. Download the Dataset
 
@@ -139,7 +139,7 @@ Check the `results/` folder for:
 
 ---
 
-## 📈 Evaluation Metrics
+## Evaluation Metrics
 
 The model is evaluated using the **leave-one-out strategy** with:
 
@@ -150,7 +150,7 @@ for `k = [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]`.
 
 ---
 
-## 🛠 Model Features
+## Model Features
 
 - Custom Transformer encoder (PyTorch native)
 - Positional & item embeddings
